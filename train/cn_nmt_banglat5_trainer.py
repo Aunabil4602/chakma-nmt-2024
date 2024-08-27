@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+##########################################
 """# Config"""
+##########################################
 
 class CONFIG:
     # Model settings
@@ -111,8 +113,9 @@ else:
 
 
 
-
+#############################################
 """# Imports"""
+#############################################
 
 import os
 os.environ["CUBLAS_WORKSPACE_CONFIG"]=":4096:8"
@@ -175,8 +178,10 @@ from pathlib import Path
 
 
 
-
+#########################################################################
 """# Linking Important Directories and Creating Dataset path"""
+#########################################################################
+
 sys.path.append(os.getcwd() + '/../utils')
 from ck2bn_bn2ck_phonetic import ck2bn_list, bn2ck_list, ck2bn, bn2ck
 
@@ -191,8 +196,10 @@ config.DOWNLOADED_DATASETS_PATH = Path(dataset_path)
 
 
 
-
+############################################################
 """# Deterministic settings"""
+############################################################
+
 def set_seed(seed=42, loader=None):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
@@ -212,8 +219,9 @@ set_seed(seed=CONFIG.seed)
 
 
 
-
+##################################################
 """# Suppress Warnings"""
+##################################################
 
 # If you want to suppress all warnings
 import warnings
@@ -226,8 +234,9 @@ warnings.filterwarnings("ignore")
 
 
 
-
+############################################################
 """# Dataset"""
+############################################################
 
 print(f'Downloading Dataset: {CONFIG.dataset_name}')
 print('\n')
@@ -358,8 +367,9 @@ print(DEV_VALIDATION_DATASET)
 
 
 
-
+################################################
 """# Tokenizer"""
+################################################
 
 TOKENIZER = AutoTokenizer.from_pretrained(CONFIG.root_model_name, use_fast=False)
 
@@ -371,8 +381,9 @@ TOKENIZER = AutoTokenizer.from_pretrained(CONFIG.root_model_name, use_fast=False
 
 
 
-
+##################################################
 """# Tokenization"""
+##################################################
 
 def tokenization(features, tokenizer = None, forward_train = True):
     if forward_train:
@@ -460,8 +471,10 @@ print(tokenized_mono)
 
 
 
-
+##################################################
 """# Model"""
+##################################################
+
 model = AutoModelForSeq2SeqLM.from_pretrained(CONFIG.root_model_name)
 ## if you want to train a pre-trained model that is placed locally
 # model = AutoModelForSeq2SeqLM.from_pretrained('./BanglaT5-results/seed-0/step-2_Forward-B2C/Banglat5-v1/checkpoint-17125', local_files_only=True)
@@ -479,8 +492,9 @@ print(model)
 
 
 
-
+###############################################
 """# Data Collator"""
+###############################################
 
 data_collator = DataCollatorForSeq2Seq(TOKENIZER, model=model)
 
@@ -493,8 +507,9 @@ data_collator = DataCollatorForSeq2Seq(TOKENIZER, model=model)
 
 
 
-
+##############################################
 """# Metrics and function"""
+##############################################
 
 bleu_metric = evaluate.load("sacrebleu")
 chrf_metric = evaluate.load("chrf")
@@ -536,9 +551,9 @@ def compute_metrics(eval_preds):
 
 
 
-
+##############################################
 """# Configs & Trainer"""
-
+##############################################
 ####################### Trainer
 
 generation_config = GenerationConfig(
@@ -600,8 +615,9 @@ trainer = Seq2SeqTrainer(
 
 
 
-
+##########################################
 """# Main Train"""
+##########################################
 trainer.train()
 
 
@@ -614,8 +630,9 @@ trainer.train()
 
 
 
-
+###########################################################################
 """# To Generate Synthetic Data and Upload to HuggingFace """
+###########################################################################
 
 # predictions = trainer.predict(tokenized_mono, max_length = CONFIG.max_length, num_beams = CONFIG.num_beans)
 
@@ -655,8 +672,10 @@ trainer.train()
 
 
 
-
+######################################################################################
 """# TO TEST A SINGLE SENTENCE WITH THE TRAINED MODEL """
+######################################################################################
+
 # model = AutoModelForSeq2SeqLM.from_pretrained('./BanglaT5-results/seed-1234/step-4_Forward-B2C/Banglat5-v1/checkpoint-17125')
 
 # model = model.to('cuda')

@@ -4,7 +4,9 @@
 ## attention used is Luong attention https://arxiv.org/pdf/1508.04025.pdf
 ## Beam Search source code: https://github.com/budzianowski/PyTorch-Beam-Search-Decoding/blob/master/decode_beam.py
 
+#############################################################
 """# CONFIGURATION """
+#############################################################
 
 class CONFIG:
     # version and outputs
@@ -95,17 +97,11 @@ class CONFIG:
 
 
 
-"""# Informations """
 
-# -*- coding: utf-8 -*-
-## model's and source training code https://github.com/bentrevett/pytorch-seq2seq/blob/master/3%20-%20Neural%20Machine%20Translation%20by%20Jointly%20Learning%20to%20Align%20and%20Translate.ipynb
-## attention used is Luong attention https://arxiv.org/pdf/1508.04025.pdf
-## Beam Search source code: https://github.com/budzianowski/PyTorch-Beam-Search-Decoding/blob/master/decode_beam.py
-
-
-
-
+##############################################################
 """# To Suppress All Warnings """
+##############################################################
+
 # Please comment out this part if you want to see the warnings
 # If you want to suppress all warnings
 import warnings
@@ -114,16 +110,26 @@ warnings.filterwarnings("ignore")
 
 
 
+
+######################################################
+"""# Linking the Necessary Directories """
+######################################################
+
 import os
 import sys
-"""# Linking the Necessary Directories """
 sys.path.append(os.getcwd() + "/../utils")
 
 
 
 
 
+
+
+
+#######################################################
 """# Imports"""
+#######################################################
+
 from datetime import datetime
 from ck2bn_bn2ck_phonetic import *
 from datasets import load_dataset, Dataset, DatasetDict, config
@@ -160,8 +166,10 @@ from pathlib import Path
 
 
 
-
+#####################################################################
 """# Training Version and DIrectory Setup """
+#####################################################################
+
 # set training destination folder
 TODAY_DATE = datetime.today().strftime('%Y-%m-%d')
 
@@ -184,10 +192,9 @@ config.DOWNLOADED_DATASETS_PATH = Path(dataset_path)
 
 
 
-
+#############################################################
 """#Reproducibility"""
-
-## Random seed
+#############################################################
 
 def set_seed(seed, loader=None):
     torch.backends.cudnn.deterministic = True
@@ -211,11 +218,11 @@ set_seed(CONFIG.seed)
 
 
 
+#################################################################
 """# Dataset download and normalize"""
+#################################################################
 
-# CONFIG.dataset_name: 'amlan107/xyz'
-print(f'Downloading Dataset: {CONFIG.dataset_name}')
-print("\n")
+print(f'Downloading Dataset: {CONFIG.dataset_name}\n')
 RAW_DATASET = load_dataset(CONFIG.dataset_name)
 
 def process_function(features):
@@ -252,9 +259,8 @@ BENCHMARK_DATASET = RAW_DATASET['benchmark']
 
 
 
-# CONFIG.base_syn_name: 'amlan107/syn_0' #12k
-print(f'Downloading Dataset: {CONFIG.base_syn_name}')
-print('\n')
+
+print(f'Downloading Dataset: {CONFIG.base_syn_name}\n')
 
 BASE_SYN = load_dataset(CONFIG.base_syn_name)
 
@@ -280,8 +286,7 @@ print(BASE_SYN)
 
 
 
-print(f'Downloading Dataset: {CONFIG.synthetic_dataset_name}')
-print("\n")
+print(f'Downloading Dataset: {CONFIG.synthetic_dataset_name}\n')
 
 SYN_DATASET = load_dataset(CONFIG.synthetic_dataset_name)
 
@@ -307,9 +312,7 @@ print(SYN_DATASET)
 
 
 
-print(f'Downloading Dataset: {CONFIG.dev_val}')
-print("\n")
-
+print(f'Downloading Dataset: {CONFIG.dev_val}\n')
 DEV_VALIDATION_DATASET = load_dataset(CONFIG.dev_val)
 
 def process_function(features):
@@ -335,8 +338,9 @@ print(DEV_VALIDATION_DATASET)
 
 
 
-
+################################################
 """# Tokenizer"""
+################################################
 
 class CkNmtTokenizer:
     TMP_FOLDER = 'ck_nmt_tokenizer_tmp'
@@ -442,7 +446,6 @@ TOKENIZER = CkNmtTokenizer.createTokenizer(vocab_size=CONFIG.vocab_size)['source
 """""""""""""""""""""""""""""""""""""# Model"""""""""""""""""""""""""""""""""""""""""""
 # =====================================================================================
 
-
 class Encoder(nn.Module):
     def __init__(self, input_dim, emb_dim, enc_hid_dim, dec_hid_dim, dropout, num_layers ):
         super().__init__()
@@ -459,8 +462,6 @@ class Encoder(nn.Module):
         embedded = self.dropout(self.embedding(src)) # [src len, batch size, emb dim]
 
         outputs, hidden = self.rnn(embedded)
-        #outputs = [src len, batch size, hid dim * num directions] outputs are always from the last layer
-        #hidden = [n layers * num directions, batch size, hid dim] is stacked [forward_1, backward_1, forward_2, backward_2, ...]
 
         # change hidden to -> [batch size, dec_hid_dim*num_layers] to make similar with decoder hidden-ouput's dimension (decoder isn't bidirectional)
         hidden = hidden.permute(1, 0, 2) #[batch size, n layers * 2, hid dim]
@@ -479,9 +480,6 @@ class Attention(nn.Module):
         self.v = nn.Linear(dec_hid_dim, 1, bias = False) # why bias false?
 
     def forward(self, hidden, encoder_outputs):
-        #hidden [batch_size, dec_hid_dim * num_layers]
-        #encoder_outputs = [src len, batch size, enc hid dim * 2]
-
         batch_size = encoder_outputs.shape[1]
         src_len = encoder_outputs.shape[0]
 
@@ -513,9 +511,6 @@ class Decoder(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, input, hidden, encoder_outputs):
-        #input = [batch size]
-        #hidden = [batch size, dec hid dim * num_layers]
-        #encoder_outputs = [src len, batch size, enc hid dim * 2]
 
         batch_size = input.shape[0]
 
@@ -533,8 +528,6 @@ class Decoder(nn.Module):
         rnn_input = torch.cat((embedded, weighted), dim = 2) # [1, batch size, (enc hid dim * 2) + emb dim]
 
         output, hidden = self.rnn(rnn_input, hidden.reshape(batch_size, self.num_layers, self.dec_hid_dim).permute(1, 0, 2).contiguous())
-        #output = [1, batch size, dec hid dim]
-        #hidden = [n layers , batch size, dec hid dim]
 
         output = output.squeeze(0) # [batch_size, dec_hid_dim] - direction & seq_len = 1
         hidden = hidden.permute(1,0,2).reshape(batch_size, -1) # [batch_size, dec_hid_dim * num_layers]
@@ -542,7 +535,6 @@ class Decoder(nn.Module):
         embedded = embedded.squeeze(0)
         weighted = weighted.squeeze(0)
         prediction = self.fc_out(torch.cat((output, weighted, embedded), dim = 1))
-        #prediction = [batch size, output dim]
 
         return prediction, hidden
 
@@ -555,18 +547,11 @@ class Seq2Seq(nn.Module):
         self.device = device
 
     def forward(self, src, trg, teacher_forcing_ratio = 0.5):
-        #src = [src len, batch size]
-        #trg = [trg len, batch size]
-
         batch_size = src.shape[1]
         trg_len = trg.shape[0]
         trg_vocab_size = self.decoder.output_dim
 
-        #tensor to store decoder outputs
         outputs = torch.zeros(trg_len, batch_size, trg_vocab_size).to(self.device)
-
-        #encoder_outputs is all hidden states of the input sequence, back and forwards
-        #hidden is the final forward and backward hidden states, passed through a linear layer
         encoder_outputs, hidden = self.encoder(src)
 
         top1 = None
@@ -607,7 +592,14 @@ class Seq2Seq(nn.Module):
         return shifted_input_ids
 
 
+
+
+
+
+###################################################################
 """# TRANSFORMER INITIALIZATION """
+###################################################################
+
 # It is enabled only if the model is a transformer, for working with RNN it is skipped.
 TRANSFORMER_MODEL_CONFIG = None
 if CONFIG.model_type == 'trans':
@@ -649,10 +641,10 @@ if CONFIG.model_type == 'trans':
 
 
 
-
+#####################################################################################
 """# Model setup and Weight Initializations"""
+#####################################################################################
 
-# set like 'Attention is all you need' !!!!!!!!!!!!!!!!!!!!!! -> then hyparameter optimize
 def glorot_initialization(m):
     #https://machinelearningmastery.com/weight-initialization-for-deep-learning-neural-networks/.
     if hasattr(m, "weight") and m.weight.dim() > 1:
@@ -696,7 +688,10 @@ def create_model():
 
 
 
+
+##########################################################
 """# Combined train, val, monoglingual data"""
+##########################################################
 
 TRAIN_TEST_RAW_DATASETS = DatasetDict({'train': SYN_DATASET['train'], 'validation': DEV_VALIDATION_DATASET['dev_val']})
 MONOLINGUAL_DATA = RAW_DATASET['monolingual']
@@ -709,7 +704,11 @@ print(MONOLINGUAL_DATA)
 
 
 
+
+
+############################################
 """# Tokenization function"""
+############################################
 
 def tokenization(features, tokenizer = None, forward_train = True):
     if forward_train:
@@ -724,7 +723,10 @@ def tokenization(features, tokenizer = None, forward_train = True):
 
 
 
+
+############################################
 """# DataLoader"""
+############################################
 
 def create_dataloader(tokenized_dataset, data_collator):
     train_dataset = tokenized_dataset['train']
@@ -779,14 +781,21 @@ def prepare_dataloader_for_benchmark(tokenizer, data_collator, forward_train):
 
 
 
-"""#Custom Beam Decoder"""
 
-######################################################### Beam Search (For single sample only, not batch)
-#######################################
+
+
+#########################################################
+"""#Custom Beam Decoder"""
+#########################################################
+
+#########################################################
+## Beam Search (For single sample only, not batch)
+############################################################################################
 ## Idea is to create a node with parents for each decoded output, keep them in priorityqueue
 ## then expore node with tNUM_TRAIN_EPOCHShe minimum error(top node of the priorityqueue)
 ## we can create the sentences by backtracking the node to its parent nodes
-#######################################
+############################################################################################
+
 class Beam_Limit_Counter:
     value=0
 
@@ -811,13 +820,9 @@ class BeamSearchNode(object):
 
         return self.logp / float(self.leng - 1 + 1e-6) + alpha * reward
 
-    def __lt__(self, other): #https://github.com/budzianowski/PyTorch-Beam-Search-Decoding/issues/3
+    def __lt__(self, other):
+        #https://github.com/budzianowski/PyTorch-Beam-Search-Decoding/issues/3
         return self.logp < other.logp
-
-
-
-
-
 
 
 
@@ -935,11 +940,6 @@ def beam_decode(decoder, decoder_hidden, encoder_outputs, tokenizer):
 
 
 
-
-
-
-
-
 def evaluateWithBeamSearch(encoder, decoder, tokenizer, sentence, max_length=CONFIG.max_length):
     with torch.no_grad():
         sentence = normalize(sentence)
@@ -960,8 +960,9 @@ def evaluateWithBeamSearch(encoder, decoder, tokenizer, sentence, max_length=CON
 
 
 
-
-"""# Benchmark testing function"""
+##############################################################
+"""# Benchmark Testing Function"""
+##############################################################
 
 def test_benchmark(model, data_loader, tokenizer):
     loss_fct_bk = CrossEntropyLoss(label_smoothing = CONFIG.label_smoothing)
@@ -1014,8 +1015,9 @@ def test_benchmark(model, data_loader, tokenizer):
 
 
 
-
-"""# Train function"""
+##############################################################
+"""# Train Function"""
+##############################################################
 
 def train_and_validate(train_dataloader, eval_dataloader, benchmark_dataloader, model, optimizer, lr_scheduler, tokenizer, run):
     print(f'Training started! RUN:{run}')
@@ -1047,13 +1049,13 @@ def train_and_validate(train_dataloader, eval_dataloader, benchmark_dataloader, 
 
     model_dict = dict()
 
-    for epoch in range(CONFIG.num_train_epochs):  # large enough, since its of no use
+    for epoch in range(CONFIG.num_train_epochs):
 
         model.train()
         lossess = 0
         total_samples = 0
 
-        for batch in train_dataloader:  # confirm and check the shapes
+        for batch in train_dataloader:
             current_steps += 1
 
             batch = {k: v.to(CONFIG.device) for k, v in batch.items()}
@@ -1209,8 +1211,9 @@ def train_and_validate(train_dataloader, eval_dataloader, benchmark_dataloader, 
 
 
 
-
+##############################################
 """# Metrics"""
+##############################################
 
 bleu_metric = evaluate.load("sacrebleu")
 train_bleu_metric = evaluate.load("sacrebleu")
@@ -1222,8 +1225,9 @@ meteor_metric = evaluate.load("meteor")
 
 
 
-
-"""# Post process method for score calculation"""
+#######################################################
+"""# Post Process Method for Score Calculation"""
+#######################################################
 
 def postprocess(predictions, labels, tokenizer):
     predictions = predictions.cpu().numpy()
@@ -1245,8 +1249,9 @@ def postprocess(predictions, labels, tokenizer):
 
 
 
-
-"""# Synthetic data generation"""
+##################################################################
+"""# Synthetic Data Generation"""
+##################################################################
 
 def generate_synthetic_dataset(forward_train, model, tokenizer):
     if forward_train:
@@ -1317,8 +1322,9 @@ def upload_synthetic_data(syn_new_data):
 
 
 
-
+########################################################
 """# Main Steps"""
+########################################################
 
 # create model and others
 model, optimizer, lr_scheduler = create_model()
@@ -1337,8 +1343,10 @@ results = train_and_validate(train_dataloader, eval_dataloader, benchmark_datalo
 
 
 
+########################################################################################################
+"""# Generating Synthetic Data on The Monolingual Set and Uploading to Huggingface Repository """
+########################################################################################################
 
-"""# Generating Synthetic data on the monolingual set and uploading to huggingface repository """
 # #How to check the best model?
 # best_path = DESTINATION + 'target2source-run0-epoch18.pt'
 
@@ -1357,7 +1365,12 @@ results = train_and_validate(train_dataloader, eval_dataloader, benchmark_datalo
 
 
 
-"""# Benchmark testing"""
+
+
+
+#################################################################################
+"""# Benchmark Testing"""
+#################################################################################
 
 # # # select best model
 # best_path = DESTINATION + 'target2source-run1-epoch14.pt'
@@ -1377,8 +1390,10 @@ results = train_and_validate(train_dataloader, eval_dataloader, benchmark_datalo
 
 
 
+###########################################################################
+"""# Single Sentence Predition """
+###########################################################################
 
-"""# Single sentence predition """
 # Please tweak it according to your need
 # # select best model
 # best_path = './cl-nmt-training-models/2023-09-29-v1/s-run0-epoch11.pt'
