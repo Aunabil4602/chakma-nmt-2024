@@ -238,9 +238,7 @@ warnings.filterwarnings("ignore")
 """# Dataset"""
 ############################################################
 
-print(f'Downloading Dataset: {CONFIG.dataset_name}')
-print('\n')
-
+print(f'Downloading Dataset: {CONFIG.dataset_name}\n')
 RAW_DATASET = load_dataset(CONFIG.dataset_name)
 
 def process_function(features):
@@ -277,10 +275,7 @@ BENCHMARK_DATASET = RAW_DATASET['benchmark']
 
 
 
-print(f'Downloading Dataset: {CONFIG.base_syn_name}')
-print('\n')
-
-
+print(f'Downloading Dataset: {CONFIG.base_syn_name}\n')
 BASE_SYN = load_dataset(CONFIG.base_syn_name)
 
 def process_function(features):
@@ -308,9 +303,7 @@ print(BASE_SYN)
 
 
 
-print(f'Downloading Dataset: {CONFIG.synthetic_dataset_name}')
-print('\n')
-
+print(f'Downloading Dataset: {CONFIG.synthetic_dataset_name}\n')
 SYN_DATASET = load_dataset(CONFIG.synthetic_dataset_name)
 print(SYN_DATASET)
 
@@ -336,10 +329,7 @@ SYN_DATASET['train'] = SYN_DATASET['train'].map(
 
 
 
-print(f'Downloading Dataset: {CONFIG.dev_val}')
-print('\n')
-
-
+print(f'Downloading Dataset: {CONFIG.dev_val}\n')
 DEV_VALIDATION_DATASET = load_dataset(CONFIG.dev_val)
 
 def process_function(features):
