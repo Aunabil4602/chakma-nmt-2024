@@ -40,5 +40,4 @@ This repository includes three training files (inside the 'train' folder):
   <li><i>cn_nmt_banglat5_trainer.py</i>: To train and test with the pretrained <a href="https://huggingface.co/csebuetnlp/banglat5">BanglaT5</a> model for Chakma and Bangla translation.</li>
   <li><i>multilingual_cn_nmt_banglat5_trainer</i>: To train and test with the pretrained <a href="https://huggingface.co/csebuetnlp/banglat5">BanglaT5</a>, incorporating Chakma, Bangla, and English languages.</li>
 </ul>
-
-Each of the files has a class named <i>"CONFIG"</i>. It has the necessary hyper-parameters and other fields for training. Change the values accordingly and run the files.
+Each of the files has a class named <i>"CONFIG"</i>. It has the necessary hyper-parameters and other fields for training. Change the values accordingly and run the files. The training files also show the performance on the benchmark or test set. Running the files will automatically show the scores on the benchmark set.
