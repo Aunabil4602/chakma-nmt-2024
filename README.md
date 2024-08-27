@@ -13,8 +13,8 @@ The dataset is the most crucial aspect of this work. The complete dataset, named
 
 To train the Bangla-Chakma and Chakma-Bangla translation models, we divided the complete Bangla-Chakma parallel set into two distinct subsets:
 <ul>
-    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-train-set"><i>chakma-nmt-base-parallel-train-set</i></a>: This set serves as the primary training data for Chakma-Bangla translations and vice versa, comprising 80% of the total parallel set. It has a total number of 12016 parallel samples</li>
-    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-dev-set"><i>chakma-nmt-base-parallel-dev-set</i></a>: This set is used for evaluation during training, consisting of 20% of the parallel set to assess Chakma-Bangla translations and vice versa. It includes 3005 parallel samples</li>
+    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-train-set"><i>chakma-nmt-base-parallel-train-set</i></a>: This set serves as the primary training data for Chakma-Bangla translations and vice versa, comprising 80% of the total parallel set (Bangla-Chakma total). It has a total number of 12016 parallel samples</li>
+    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-dev-set"><i>chakma-nmt-base-parallel-dev-set</i></a>: This set is used for evaluation during training, consisting of 20% of the parallel set (Bangla-Chakma total) to assess Chakma-Bangla translations and vice versa. It includes 3005 parallel samples</li>
 </ul>
 Therefore, it is not required to split the parallel set for training a model.
 
