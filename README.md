@@ -4,7 +4,7 @@
 # Dataset
 The dataset is the most crucial aspect of this work. The complete dataset, named "<a href="https://huggingface.co/datasets/amlan107/chakma-nmt-complete-dataset"><i>chakma-nmt-complete-dataset</a>,"</i> includes <b>parallel</b>, <b>monolingual</b>, and <b>benchmark</b> sets for Chakma to Bangla or English translations, and vice versa.
 <br>
-Details about the <b>parallel set</b> (exact corresponding translations):
+<u>Details about the <b>parallel set</b> (exact corresponding translations)</u>:
 <ul>
     <li>Total Bangla-Chakma-English parallel sentences/segments: 8647</li>
     <li>Only Bangla-Chakma parallel sentences/segments: 6374</li>
@@ -18,14 +18,14 @@ To train the Bangla-Chakma and Chakma-Bangla translation models, we divided the 
 </ul>
 Therefore, it is not required to split the parallel set for training a model.
 
-Details of the <b>monolingual set</b> (No corresponding translations):
+<u>Details of the <b>monolingual set</b> (No corresponding translations)</u>:
 <ul>
     <li>Total Bangla monolingual sentences/segments: 150000</li>
     <li>English monolingual sentences/segments: 150000</li>
     <li>Total Chakma monolingual sentences/segments: 42783</li>
 </ul>
 
-Details about the <b>benchmark set</b> (exact corresponding translations):<br>
+<u>Details about the <b>benchmark set</b> (exact corresponding translations)</u>:<br>
 Benchmark set consists of 600 samples of parallel (exact corresponding translations) Chakma-Bangla sentences/segments.
 
 **Description on the dataset for multilingual training will the added soon...**
