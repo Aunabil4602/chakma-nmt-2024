@@ -1,4 +1,4 @@
-# chakma-nmt-2024
+# Chakma Machine Translation
 
 
 # Dataset
