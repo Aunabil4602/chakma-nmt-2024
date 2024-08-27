@@ -27,7 +27,7 @@ class CONFIG:
 
     # language # actual source = 'ck', target = 'bn'
     source_lang = 'bn'
-    target_lang = 'ck'
+    target_lang = 'ccp'
 
     # data params
     dataset_name = 'amlan107/xyz'

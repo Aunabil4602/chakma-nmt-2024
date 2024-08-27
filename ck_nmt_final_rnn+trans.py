@@ -33,7 +33,7 @@ class CONFIG:
 
     # language # actual source = 'ck', target = 'bn'
     source_lang = 'bn'
-    target_lang = 'ck'
+    target_lang = 'ccp'
 
     # model params rnn
     rnn_hidden_size = 1024
