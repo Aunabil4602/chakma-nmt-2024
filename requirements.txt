@@ -155,7 +155,7 @@ google-cloud-pubsub==2.23.0
 google-cloud-resource-manager==1.12.5
 google-cloud-storage==2.8.0
 google-cloud-translate==3.15.5
-google-colab @ file:///colabtools/dist/google_colab-1.0.0.tar.gz#sha256=9dde44dd5e9bd79eca7d0e0b37b137a1f398c7faed522f26836c6159ccbceec2
+google-colab @ file:///colabtools/dist/google_colab-1.0.0.tar.gz#sha256=a9bbac555bef371afc8b21a87d60e8fb4ffeef2a52c03cfa60bfc6cd420b974c
 google-crc32c==1.5.0
 google-generativeai==0.7.2
 google-pasta==0.2.0
@@ -279,7 +279,7 @@ nest-asyncio==1.6.0
 networkx==3.3
 nibabel==5.0.1
 nltk==3.8.1
-normalizer @ git+https://github.com/Aunabil4602/ck-nmt-utils.git@e523507bc401e74806077653bbf5c0bd152b49a5
+normalizer @ git+https://github.com/Aunabil4602/chakma-nmt-normalizer.git@e523507bc401e74806077653bbf5c0bd152b49a5
 notebook==6.5.5
 notebook_shim==0.2.4
 numba==0.60.0

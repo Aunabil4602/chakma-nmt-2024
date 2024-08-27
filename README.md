@@ -36,7 +36,7 @@ First install the libraries with specific versions as mentioned in the requireme
 
 This repository includes three training files (inside the 'train' folder):
 <ul>
-  <li><i>ck_nmt_final_rnn+trans.py</i>: To train and test RNN and Transformer models (both from scratch) for translating between Chakma and Bangla.</li>
+  <li><i>ck_nmt_final_rnn_trans.py</i>: To train and test RNN and Transformer models (both from scratch) for translating between Chakma and Bangla.</li>
   <li><i>cn_nmt_banglat5_trainer.py</i>: To train and test with the pretrained <a href="https://huggingface.co/csebuetnlp/banglat5">BanglaT5</a> model for Chakma and Bangla translation.</li>
   <li><i>multilingual_cn_nmt_banglat5_trainer</i>: To train and test with the pretrained <a href="https://huggingface.co/csebuetnlp/banglat5">BanglaT5</a>, incorporating Chakma, Bangla, and English languages.</li>
 </ul>
