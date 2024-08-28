@@ -35,10 +35,11 @@ The dataset for the multilingual model is the same as the aforementioned dataset
 First install the libraries with specific versions as mentioned in the requirements.txt file. To install the libraries open your terminal and run the following script:<br>
 `pip install requirements.txt`
 
-This repository includes three training files (inside the 'train' folder):
+This repository includes three training files (inside the <i>"train"</i> folder):
 <ul>
   <li><i>ck_nmt_final_rnn_trans.py</i>: To train and test RNN and Transformer models (both from scratch) for translating between Chakma and Bangla.</li>
   <li><i>cn_nmt_banglat5_trainer.py</i>: To train and test with the pretrained <a href="https://huggingface.co/csebuetnlp/banglat5">BanglaT5</a> model for Chakma and Bangla translation.</li>
   <li><i>multilingual_cn_nmt_banglat5_trainer</i>: To train and test with the pretrained <a href="https://huggingface.co/csebuetnlp/banglat5">BanglaT5</a>, incorporating Chakma, Bangla, and English languages.</li>
 </ul>
-Each of the files has a class named <i>"CONFIG"</i>. It has the necessary hyper-parameters and other fields for training. Change the values accordingly and run the files. The training files also show the performance on the benchmark or test set. Running the files will automatically show the scores on the benchmark set.
+Each of the files has a class named <i>"CONFIG"</i>. It has the necessary hyper-parameters and other fields for training. Change the values accordingly and run the files. The training files also show the performance on the benchmark or test set. Running the files will automatically show the scores on the benchmark set.<br>
+The <i>"utils"</i> folder contains <i>"ck2bn_bn2ck_phonetic.py"</i>, which is used for Chakma-Bangla transliteration (an essential part to work with the BanglaT5).
