@@ -4,31 +4,32 @@
 # Dataset
 The dataset is the most crucial aspect of this work. The complete dataset, named "<a href="https://huggingface.co/datasets/amlan107/chakma-nmt-complete-dataset"><i>chakma-nmt-complete-dataset</a>,"</i> includes <b>parallel</b>, <b>monolingual</b>, and <b>benchmark</b> sets for Chakma to Bangla or English translations, and vice versa.
 <br>
-<u>Details about the <b>parallel set</b> (exact corresponding translations)</u>:
+<ins>Details about the <b>parallel set</b> (exact corresponding translations)</ins>:
 <ul>
-    <li>Total Bangla-Chakma-English parallel sentences/segments: 8647</li>
-    <li>Only Bangla-Chakma parallel sentences/segments: 6374</li>
-    <li>Total Bangla-Chakma parallel sentences/segments: (8647+6374) = 15021</li>
+    <li>Total Bangla-Chakma-English parallel sentences/segments: 8,647</li>
+    <li>Only Bangla-Chakma parallel sentences/segments: 6,374</li>
+    <li>Total Bangla-Chakma parallel sentences/segments: (8647+6374) = 15,021</li>
 </ul>
 
 To train the Bangla-Chakma and Chakma-Bangla translation models, we divided the complete Bangla-Chakma parallel set into two distinct subsets:
 <ul>
-    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-train-set"><i>chakma-nmt-base-parallel-train-set</i></a>: This set serves as the primary training data for Chakma-Bangla translations and vice versa, comprising 80% of the total parallel set (Bangla-Chakma total). It has a total number of 12016 parallel samples</li>
-    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-dev-set"><i>chakma-nmt-base-parallel-dev-set</i></a>: This set is used for evaluation during training, consisting of 20% of the parallel set (Bangla-Chakma total) to assess Chakma-Bangla translations and vice versa. It includes 3005 parallel samples</li>
+    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-train-set"><i>chakma-nmt-base-parallel-train-set</i></a>: This set serves as the primary training data for Chakma-Bangla translations and vice versa, comprising 80% of the total parallel set (Bangla-Chakma total). It has a total number of 12,016 parallel samples</li>
+    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-dev-set"><i>chakma-nmt-base-parallel-dev-set</i></a>: This set is used for evaluation during training, consisting of 20% of the parallel set (Bangla-Chakma total) to assess Chakma-Bangla translations and vice versa. It includes 3,005 parallel samples</li>
 </ul>
 Therefore, it is not required to split the parallel set for training a model.
 
-<u>Details of the <b>monolingual set</b> (No corresponding translations)</u>:
+<ins>Details of the <b>monolingual set</b> (No corresponding translations)</ins>:
 <ul>
-    <li>Total Bangla monolingual sentences/segments: 150000</li>
-    <li>English monolingual sentences/segments: 150000</li>
-    <li>Total Chakma monolingual sentences/segments: 42783</li>
+    <li>Total Bangla monolingual sentences/segments: 150,000</li>
+    <li>English monolingual sentences/segments: 150,000</li>
+    <li>Total Chakma monolingual sentences/segments: 42,783</li>
 </ul>
 
-<u>Details about the <b>benchmark set</b> (exact corresponding translations)</u>:<br>
+<ins>Details about the <b>benchmark set</b> (exact corresponding translations)</ins>:<br>
 Benchmark set consists of 600 samples of parallel (exact corresponding translations) Chakma-Bangla sentences/segments.
 
-**Description on the dataset for multilingual training will the added soon...**
+<ins>Description on the dataset used for the multilingual translation (bascially, Chakma-Bangla-English, from one language to any other language)</ins>:<br>
+The dataset for the multilingual model is the same as the aforementioned dataset. We used 15,021 sentences/segments from the parallel set, including 8,647 Bangla-Chakma-English translated sentences/segments. Similarly as before, we created 12,016 parallel (translated) samples for training and 3,005 parallel (translated) samples for evaluation. Additionally, we incorporated 10,000 Bangla-English translation pairs from a prior study titled "<a href="https://aclanthology.org/2020.emnlp-main.207/">Not Low-Resource Anymore</a>".
 
 # Codes
 First install the libraries with specific versions as mentioned in the requirements.txt file. To install the libraries open your terminal and run the following script:<br>
