@@ -1,45 +1,62 @@
-# Chakma Machine Translation
+# ChakmaNMT
 
+## Paper
 
-# Dataset
-The dataset is the most crucial aspect of this work. The complete dataset, named "<a href="https://huggingface.co/datasets/amlan107/chakma-nmt-complete-dataset"><i>chakma-nmt-complete-dataset</a>,"</i> includes <b>parallel</b>, <b>monolingual</b>, and <b>benchmark</b> sets for Chakma to Bangla or English translations, and vice versa.
-<br>
-<ins>Details about the <b>parallel set</b> (exact corresponding translations)</ins>:
-<ul>
-    <li>Total Bangla-Chakma-English parallel sentences/segments: 8,647</li>
-    <li>Only Bangla-Chakma parallel sentences/segments: 6,374</li>
-    <li>Total Bangla-Chakma parallel sentences/segments: (8647+6374) = 15,021</li>
-</ul>
+This repository contains code and resources for **[ChakmaNMT: Machine Translation for a Low-Resource and Endangered Language via Transliteration](https://arxiv.org/abs/2410.10219)**, accepted at **WMT 2026**.
 
-To train the Bangla-Chakma and Chakma-Bangla translation models, we divided the complete Bangla-Chakma parallel set into two distinct subsets:
-<ul>
-    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-train-set"><i>chakma-nmt-base-parallel-train-set</i></a>: This set serves as the primary training data for Chakma-Bangla translations and vice versa, comprising 80% of the total parallel set (Bangla-Chakma total). It has a total number of 12,016 parallel samples</li>
-    <li><a href="https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-dev-set"><i>chakma-nmt-base-parallel-dev-set</i></a>: This set is used for evaluation during training, consisting of 20% of the parallel set (Bangla-Chakma total) to assess Chakma-Bangla translations and vice versa. It includes 3,005 parallel samples</li>
-</ul>
-Therefore, it is not required to split the parallel set for training a model.
+The work introduces the first and, to our knowledge, largest documented Chakma--Bangla machine translation resource. It studies from-scratch neural and statistical MT, pretrained models, multilingual training, back-translation, and transliteration-based transfer for Chakma (`ccp`) and Bangla (`bn`).
 
-<ins>Details of the <b>monolingual set</b> (No corresponding translations)</ins>:
-<ul>
-    <li>Total Bangla monolingual sentences/segments: 150,000</li>
-    <li>English monolingual sentences/segments: 150,000</li>
-    <li>Total Chakma monolingual sentences/segments: 42,783</li>
-</ul>
+## Dataset
 
-<ins>Details about the <b>benchmark set</b> (exact corresponding translations)</ins>:<br>
-Benchmark set consists of 600 samples of parallel (exact corresponding translations) Chakma-Bangla sentences/segments.
+The complete dataset is available on Hugging Face:
 
-<ins>Description on the dataset used for the multilingual translation (bascially, Chakma-Bangla-English, from one language to any other language)</ins>:<br>
-The dataset for the multilingual model is the same as the aforementioned dataset. We used 15,021 sentences/segments from the parallel set, including 8,647 Bangla-Chakma-English translated sentences/segments. Similarly as before, we created 12,016 parallel (translated) samples for training and 3,005 parallel (translated) samples for evaluation. Additionally, we incorporated 10,000 Bangla-English translation pairs from a prior study titled "<a href="https://aclanthology.org/2020.emnlp-main.207/">Not Low-Resource Anymore</a>".
+**[amlan107/chakma-nmt-complete-dataset](https://huggingface.co/datasets/amlan107/chakma-nmt-complete-dataset)**
 
-# Codes
-First install the libraries with specific versions as mentioned in the requirements.txt file. To install the libraries open your terminal and run the following script:<br>
-`pip install requirements.txt`
+It contains three splits:
 
-This repository includes three training files (inside the <i>"train"</i> folder):
-<ul>
-  <li><i>ck_nmt_final_rnn_trans.py</i>: To train and test RNN and Transformer models (both from scratch) for translating between Chakma and Bangla.</li>
-  <li><i>cn_nmt_banglat5_trainer.py</i>: To train and test with the pretrained <a href="https://huggingface.co/csebuetnlp/banglat5">BanglaT5</a> model for Chakma and Bangla translation.</li>
-  <li><i>multilingual_cn_nmt_banglat5_trainer</i>: To train and test with the pretrained <a href="https://huggingface.co/csebuetnlp/banglat5">BanglaT5</a>, incorporating Chakma, Bangla, and English languages.</li>
-</ul>
-Each of the files has a class named <i>"CONFIG"</i>. It has the necessary hyper-parameters and other fields for training. Change the values accordingly and run the files. The training files also show the performance on the benchmark or test set. Running the files will automatically show the scores on the benchmark set.<br>
-The <i>"utils"</i> folder contains <i>"ck2bn_bn2ck_phonetic.py"</i>, which is used for Chakma-Bangla transliteration (an essential part to work with the BanglaT5).
+| Split | Size | Description |
+|---|---:|---|
+| Parallel | 15,021 | Bangla--Chakma translation pairs, comprising 9,548 sentence pairs and 5,473 dictionary word pairs. Of the sentence pairs, 8,647 also include aligned English. |
+| Monolingual | Up to 150,000 per language | 150,000 Bangla, 150,000 English, and 42,783 Chakma samples. |
+| Benchmark | 600 | Chakma--Bangla--English evaluation rows corresponding to 500 unique source sentences. |
+
+For the bilingual experiments, the 15,021 parallel pairs were divided into:
+
+- **Training:** [12,016 samples](https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-train-set)
+- **Development:** [3,005 samples](https://huggingface.co/datasets/amlan107/chakma-nmt-base-parallel-dev-set)
+
+The multilingual experiments additionally use 10,000 Bangla--English translation pairs from [*Not Low-Resource Anymore: Aligner Ensembling, Batch Filtering, and New Datasets for Bengali-English Machine Translation*](https://aclanthology.org/2020.emnlp-main.207/).
+
+## Code
+
+Install the required packages with:
+
+```bash
+pip install -r requirements.txt
+```
+
+The `train/` directory contains:
+
+- `ck_nmt_final_rnn_trans.py`: trains and evaluates the from-scratch RNN and Transformer models.
+- `cn_nmt_banglat5_trainer.py`: trains and evaluates BanglaT5 for Chakma--Bangla translation.
+- `multilingual_cn_nmt_banglat5_trainer.py`: trains and evaluates multilingual BanglaT5 with Chakma, Bangla, and English.
+
+Each training script provides a `CONFIG` class for paths and hyperparameters and reports performance on the benchmark set.
+
+The normalization and Chakma--Bangla transliteration code is maintained separately in **[chakma-nmt-normalizer](https://github.com/Aunabil4602/chakma-nmt-normalizer)**.
+
+## Citation
+
+If you use the dataset or code, please kindly cite our paper:
+
+```bibtex
+@misc{chakma2026chakmanmtmachinetranslationlowresource,
+      title={ChakmaNMT: Machine Translation for a Low-Resource and Endangered Language via Transliteration}, 
+      author={Aunabil Chakma and Aditya Chakma and Masum Hasan and Soham Khisa and Chumui Tripura and Rifat Shahriyar},
+      year={2026},
+      eprint={2410.10219},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2410.10219}, 
+}
+```
